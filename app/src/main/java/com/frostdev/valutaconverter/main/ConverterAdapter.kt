@@ -20,11 +20,11 @@ import java.util.*
 class ConverterAdapter : RecyclerView.Adapter<ConverterAdapter.SingleConverterViewHolder>() {
 
     private lateinit var singleConverterList:List<SingleRate>
-    private lateinit var mRecycler: RecyclerView
     private lateinit var mContext: Context
 
     companion object {
         private lateinit var mAdapter: ConverterAdapter
+        lateinit var mRecycler: RecyclerView
         var inputAmount = 1f
         var focusCurrency = "EUR"
         var hasChanged = false
@@ -68,6 +68,10 @@ class ConverterAdapter : RecyclerView.Adapter<ConverterAdapter.SingleConverterVi
         return inputAmount
     }
 
+    fun getRecyclerView(): RecyclerView {
+        return mRecycler
+    }
+
     override fun getItemCount(): Int {
         return if(::singleConverterList.isInitialized) singleConverterList.size else 0
     }
@@ -94,7 +98,6 @@ class ConverterAdapter : RecyclerView.Adapter<ConverterAdapter.SingleConverterVi
                     imm.hideSoftInputFromWindow(v.windowToken, 1)
                     mAdapter.setFocusValuta(binding.valutaConverterAbbreviation.text.toString())
                     binding.textIndicator.setBackgroundColor(itemView.resources.getColor(R.color.colorBlue, itemView.context.theme))
-                    inputAmount = 1f
                     moveListItem(adapterPosition)
                 }else{
                     binding.textIndicator.setBackgroundColor(itemView.resources.getColor(R.color.colorLightGrey, itemView.context.theme))
@@ -130,13 +133,13 @@ class ConverterAdapter : RecyclerView.Adapter<ConverterAdapter.SingleConverterVi
         fun moveListItem (position: Int){
             if(position != 0) {
                 hasChanged = true
-                inputAmount = mAdapter.singleConverterList.get(position).rate
+                inputAmount = 1f
                 focusCurrency = mAdapter.singleConverterList.get(position).abbreviation
                 mAdapter.singleConverterList[position].rate = 1f
                 mAdapter.notifyItemChanged(position)
                 Collections.swap(mAdapter.singleConverterList, position, 0)
                 mAdapter.notifyItemMoved(position, 0)
-                mAdapter.mRecycler.scrollToPosition(0)
+                mRecycler.scrollToPosition(0)
             }
         }
     }

@@ -51,7 +51,7 @@ class MainActivityViewModel(): ViewModel() {
             val currencyInfo =
                 JSONObject(MainActivity.activityComponent.activityContext().readJsonAsset("currency.json"))
             var id: Long = 2
-            var singleRate: SingleRate?
+            val singleRate: SingleRate?
             baseCurrency = converterAdapter.getFocusValuta()
             rateRespons.rates.entries.forEach {
                 val currencyInfoObject = currencyInfo.getJSONObject(it.key)
@@ -76,6 +76,7 @@ class MainActivityViewModel(): ViewModel() {
             )
             converterList!!.add(0, singleRate)
             converterAdapter.updateConverterList(converterList!!)
+            converterAdapter.getRecyclerView().setHasFixedSize(true)
         }
     }
 }
